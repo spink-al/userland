@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012, Broadcom Europe Ltd
+Copyright (c) 2019, Raspberry Pi (Trading) Ltd
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -25,58 +25,19 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/** Very simple test code for the vcfiled locking
-  */
-#include "vcfiled_check.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdarg.h>
+#define PROCESSOR_BCM2835 0
+#define PROCESSOR_BCM2836 1
+#define PROCESSOR_BCM2837 2
+#define PROCESSOR_BCM2838 3
 
-static void usage(const char *prog)
-{
-   fprintf(stderr, "usage: %s lock|check <lockfile>\n", prog);
-   exit(1);
-}
+/* Returns the type of the Pi being used
+*/
+extern int get_model_type(void);
 
-static void logmsg(int level, const char *fmt, ...)
-{
-   (void)level;
+/* Returns 1 if model is  Pi4
+*/
+extern int is_model_pi4(void);
 
-   va_list ap;
-   va_start(ap, fmt);
-   vprintf(fmt, ap);
-   va_end(ap);
-}
-
-int main(int argc, const char **argv)
-{
-   if (argc != 3)
-   {
-      usage(argv[0]);
-   }
-   const char *lockfile = argv[2];
-   if (strcmp(argv[1], "lock") == 0)
-   {
-      int rc = vcfiled_lock(lockfile, logmsg);
-      if (rc)
-      {
-         printf("failed to lock %s\n", lockfile);
-         exit(1);
-      }
-      sleep(300);
-   }
-   else if (strcmp(argv[1], "check") == 0)
-   {
-      printf("%s\n",
-             vcfiled_is_running(lockfile) ?
-             "running" : "not running");
-   }
-   else
-   {
-      usage(argv[0]);
-   }
-   return 0;
-}
-
+/* returns the processor ID
+*/
+extern int get_processor_id(void);

@@ -89,7 +89,8 @@ extern const unsigned int vc_image_rgb_component_order[VC_IMAGE_MAX + 1];
    case VC_IMAGE_YUV422YUYV:  \
    case VC_IMAGE_YUV422YVYU:  \
    case VC_IMAGE_YUV422UYVY:  \
-   case VC_IMAGE_YUV422VYUY
+   case VC_IMAGE_YUV422VYUY:  \
+   case VC_IMAGE_YUV10COL
 
 #define case_VC_IMAGE_ANY_RGB \
    case VC_IMAGE_RGB565:      \
@@ -108,7 +109,11 @@ extern const unsigned int vc_image_rgb_component_order[VC_IMAGE_MAX + 1];
    case VC_IMAGE_BGR888:      \
    case VC_IMAGE_BGR888_NP:   \
    case VC_IMAGE_ARGB8888:    \
-   case VC_IMAGE_XRGB8888
+   case VC_IMAGE_XRGB8888:    \
+   case VC_IMAGE_RGBX8888:    \
+   case VC_IMAGE_BGRX8888:    \
+   case VC_IMAGE_RGBA1010102
+
 
 #define case_VC_IMAGE_ANY_RGB_NOT_TF \
    case VC_IMAGE_RGB565:      \
@@ -124,7 +129,8 @@ extern const unsigned int vc_image_rgb_component_order[VC_IMAGE_MAX + 1];
    case VC_IMAGE_ARGB8888:    \
    case VC_IMAGE_XRGB8888:    \
    case VC_IMAGE_RGBX8888:    \
-   case VC_IMAGE_BGRX8888
+   case VC_IMAGE_BGRX8888:    \
+   case VC_IMAGE_RGBA1010102
 
 #define case_VC_IMAGE_ANY_TFORMAT \
    case VC_IMAGE_TF_RGBA32:   \
@@ -155,7 +161,7 @@ int calculate_pitch(VC_IMAGE_TYPE_T type, int width, int height, uint8_t num_cha
 
 /* Check if an image will use an alternate memory layout, in order to cope with
  * codec limitation. Applies to YUV_UV images taller than 1344 lines. */
-int vc_image_is_tall_yuv_uv(VC_IMAGE_TYPE_T type, int height);
+int vc_image_is_tall_yuv_uv(VC_IMAGE_T *image);
 
 /******************************************************************************
 Data member access.

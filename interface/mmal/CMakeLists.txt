@@ -11,8 +11,10 @@ add_subdirectory(core)
 add_subdirectory(util)
 add_subdirectory(vc)
 add_subdirectory(components)
-add_subdirectory(openmaxil)
-add_subdirectory(client)
+if(NOT ARM64)
+   add_subdirectory(openmaxil)
+   add_subdirectory(client)
+endif()
 
 target_link_libraries(mmal mmal_core mmal_util mmal_vc_client vcos mmal_components)
 
@@ -27,7 +29,6 @@ install(FILES
    mmal_events.h
    mmal_format.h
    mmal_logging.h
-   mmal_metadata.h
    mmal_parameters.h
    mmal_parameters_audio.h
    mmal_parameters_camera.h

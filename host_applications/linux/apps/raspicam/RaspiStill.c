@@ -119,6 +119,18 @@ enum
 /// exposure etc. in milliseconds.
 #define CAMERA_SETTLE_TIME       1000
 
+int fileCheck(const char *fileName);
+
+int fileCheck(const char *fileName){
+    if(!access(fileName, F_OK )){
+        //printf("The File %s\t was Found\n",fileName);
+        return 0;
+    }else{
+        return 1;
+    }
+}
+
+
 /** Structure containing all state information for the current run
  */
 typedef struct
@@ -1727,7 +1739,7 @@ int main(int argc, const char **argv)
       if (state.common_settings.verbose)
          fprintf(stderr, "Starting component connection stage\n");
 
-      camera_preview_port = state.camera_component->output[MMAL_CAMERA_PREVIEW_PORT];
+      //camera_preview_port = state.camera_component->output[MMAL_CAMERA_PREVIEW_PORT];
       camera_video_port   = state.camera_component->output[MMAL_CAMERA_VIDEO_PORT];
       camera_still_port   = state.camera_component->output[MMAL_CAMERA_CAPTURE_PORT];
       encoder_input_port  = state.encoder_component->input[0];
@@ -1740,10 +1752,11 @@ int main(int argc, const char **argv)
 
          // Note we are lucky that the preview and null sink components use the same input port
          // so we can simple do this without conditionals
-         preview_input_port  = state.preview_parameters.preview_component->input[0];
+         //preview_input_port  = state.preview_parameters.preview_component->input[0];
 
          // Connect camera to preview (which might be a null_sink if no preview required)
-         status = connect_ports(camera_preview_port, preview_input_port, &state.preview_connection);
+         //status = connect_ports(camera_preview_port, preview_input_port, &state.preview_connection);
+	 status = MMAL_SUCCESS;
       }
 
       if (status == MMAL_SUCCESS)
@@ -1926,6 +1939,17 @@ int main(int argc, const char **argv)
 
                   if (state.burstCaptureMode)
                   {
+                        int fileCheckIs = fileCheck("/tmp/end");
+                        if (fileCheckIs == 0)
+                        {
+                                printf ("It exists\n");
+
+                                //MMAL_PARAMETER_FPS_RANGE_T fps_range = {{MMAL_PARAMETER_FPS_RANGE, sizeof(fps_range)},
+                                //                                             { 50, 1000 }, {166, 1000}};
+                                //mmal_port_parameter_set(still_port, &fps_range.hdr);
+
+                                goto error;
+                        }
                      mmal_port_parameter_set_boolean(state.camera_component->control,  MMAL_PARAMETER_CAMERA_BURST_CAPTURE, 1);
                   }
 
